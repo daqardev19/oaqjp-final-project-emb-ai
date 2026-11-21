@@ -1,0 +1,9 @@
+﻿<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Emotion Detector</title>
+<style>body{font:16px system-ui,sans-serif;max-width:760px;margin:4rem auto;padding:0 1rem;color:#17202a}textarea{box-sizing:border-box;width:100%;min-height:140px;padding:1rem}button{margin-top:1rem;padding:.7rem 1.2rem}#response{margin-top:1.5rem;padding:1rem;background:#eef4f8;white-space:pre-wrap}</style></head>
+<body><h1>Emotion Detector</h1><p>Enter a sentence to detect its emotions.</p>
+<form id="form"><label for="textToAnalyze">Text to analyze</label><textarea id="textToAnalyze" name="textToAnalyze" required></textarea><button type="submit">Analyze</button></form>
+<div id="response" role="status" aria-live="polite"></div>
+<script>document.getElementById('form').addEventListener('submit',async event=>{event.preventDefault();const body=new URLSearchParams(new FormData(event.target));const response=await fetch('/emotionDetector',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});document.getElementById('response').textContent=await response.text();});</script>
+</body></html>
