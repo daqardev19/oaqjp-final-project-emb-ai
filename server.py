@@ -1,4 +1,5 @@
-"""Flask web interface for the emotion detector."""
+﻿"""Flask web interface for the emotion detector."""
+# Static analysis: run `pylint server.py EmotionDetection` from the project root.
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -11,23 +12,22 @@ def home():
     return render_template("index.html")
 
 
-@app.post("/emotionDetector")
-def detect_emotion():
+@app.get("/emotionDetector")
+# The route name follows the assignment's camelCase endpoint convention.
+# pylint: disable=invalid-name
+def emotionDetector():
     """Analyze submitted text and return a readable result."""
-    text_to_analyze = request.form.get("textToAnalyze", "")
-    if not text_to_analyze.strip():
-        return "Invalid text! Please try again!", 400
+    text_to_analyze = request.args.get("textToAnalyze", "")
     result = emotion_detector(text_to_analyze)
-    if result["dominant_emotion"] is None:
-        return "The text could not be analyzed. Please try different text.", 400
-    emotion_names = ("anger", "disgust", "fear", "joy", "sadness")
-    formatted = ", ".join(
-        f"{emotion}: {result[emotion]}" for emotion in emotion_names
-    )
-    dominant = result["dominant_emotion"]
+    if result.get("dominant_emotion") is None:
+        return "Invalid text! Please try again!"
+
     return (
-        f"For the given statement, the system response is {formatted}. "
-        f"The dominant emotion is {dominant}."
+        "For the given statement, the system response is "
+        f"'anger': {result['anger']}, 'disgust': {result['disgust']}, "
+        f"'fear': {result['fear']}, 'joy': {result['joy']} and "
+        f"'sadness': {result['sadness']}. The dominant emotion is "
+        f"{result['dominant_emotion']}."
     )
 
 

@@ -41,9 +41,9 @@ class TestEmotionDetector(unittest.TestCase):
     def test_empty_text(self):
         self.assertIsNone(emotion_detector(" ")["dominant_emotion"])
 
-    def test_blank_web_form_returns_400(self):
-        response = self.client.post("/emotionDetector", data={"textToAnalyze": "  "})
-        self.assertEqual(response.status_code, 400)
+    def test_blank_get_returns_error_message(self):
+        response = self.client.get("/emotionDetector", query_string={"textToAnalyze": "  "})
+        self.assertEqual(response.status_code, 200)
         self.assertIn(b"Invalid text! Please try again!", response.data)
 
     def test_home_page_loads(self):
